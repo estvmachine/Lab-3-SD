@@ -58,7 +58,7 @@ public class DataXMLControlador {
         }
     }
     
-    public boolean agregar(String title, String text){
+    public boolean agregar(String title, String text, int id){
 
             //Determino la fecha para guardarla
             Date now = new Date();
@@ -66,6 +66,7 @@ public class DataXMLControlador {
             // Creo un documento para agregar a la coleccion.
             DBObject document = new BasicDBObject("title", title)
                     .append("text", text)
+                    .append("id" , id)
                     .append("create_at", now);
 
             // Inserto el documento en la coleccion de transacciones en el database
@@ -94,4 +95,28 @@ public class DataXMLControlador {
             return null;
         }
     }
+    
+     public List<DBObject> buscar(int id) {
+        
+       try{
+            DBCursor resultados = dataCollection.find(new BasicDBObject("id",id));
+            System.out.println(resultados.toArray());
+            return resultados.toArray();
+        }
+        catch(Exception e){
+            System.out.println(e);
+            return null;
+        }
+    }
+     
+     public void borrarTodo(){
+         
+        try{
+            dataCollection.drop();
+        }
+        catch(Exception e){
+            System.out.println(e);
+        }
+     
+     }
 }

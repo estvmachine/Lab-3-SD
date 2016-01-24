@@ -44,13 +44,14 @@ public class LecturaXml {
         //Instancio controlador de DataXML, con este se puede agregar, listas, borrar de MongoDB, etc
         dataControlador= new DataXMLControlador();
         
-        System.out.println("Imprimir BD Mongo");
-        dataControlador.listar();
+        System.out.println("Iniciar BD Mongo");
+        System.out.println("Borrando datos antiguos");
+        dataControlador.borrarTodo();
        
         //Leo desde prueba.xml
 	SAXParserFactory factory = SAXParserFactory.newInstance();
 	SAXParser saxParser = factory.newSAXParser();
-        File file = new File("prueba.xml");
+        File file = new File("ismael.xml");
         
 
 	DefaultHandler handler = new DefaultHandler() {
@@ -60,6 +61,7 @@ public class LecturaXml {
         String texto = "";
         String titulo= "";
         StringBuilder content;
+        int contador=0;
 
         @Override
 	public void startElement(String uri, String localName,String qName, 
@@ -91,8 +93,9 @@ public class LecturaXml {
                     isTexto=false;
                     
                     //Guardar en BD
-                    dataControlador.agregar(titulo, texto);
-                    dataControlador.listar();
+                    contador= contador +1;
+                    dataControlador.agregar(titulo, texto, contador);
+                    dataControlador.buscar(contador);
                     //System.out.println("Titulo :" + titulo +  ", Texto: "+ texto);
                 }
 	}
