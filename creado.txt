@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<title>Wikipedia:Artículos solicitados</title>
+<ns>4</ns>
+<id>5</id>
+<textos>
+   <cita> A quien madruga Dios le ayuda ?</cita>
+   <poema xml:space="preserve"> 
+                 El monte es verde,
+                 el agua incolora
+                 y a mi no se me ocurre una rima 
+   </poema>
+</textos>
