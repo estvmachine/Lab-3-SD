@@ -20,16 +20,16 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import modelo.DataXML;
+import modelo.Palabra;
 import static org.bson.types.ObjectId.get;
 
-public class DataXMLControlador {
+public class PalabraControlador {
     
-    private final DBCollection dataCollection;
+    private final DBCollection palabraCollection;
     private MongoClient cliente;
     private DB database;
     
-    public DataXMLControlador() {
+    public PalabraControlador() {
           
         try {
         // Creo una instancia de cliente de MongoDB
@@ -41,15 +41,15 @@ public class DataXMLControlador {
         //Creo conexion con base de datos
         database = cliente.getDB("DBIndex");
         
-        dataCollection = database.getCollection("palabras");
+        palabraCollection = database.getCollection("palabras");
          
     }
     
-    public boolean agregar(DataXML palabra){
+    public boolean agregar(Palabra palabra){
         
         // Inserto el documento en la coleccion de transacciones en el database
         try {
-            dataCollection.insert(palabra);
+            palabraCollection.insert(palabra);
             return true;
         } 
             catch (MongoException.DuplicateKey e) {
@@ -58,20 +58,20 @@ public class DataXMLControlador {
         }
     }
     
-    public boolean agregar(String title, String text, int id){
+    public boolean agregar(int id_page, String palabra, int count){
 
             //Determino la fecha para guardarla
             Date now = new Date();
 
             // Creo un documento para agregar a la coleccion.
-            DBObject document = new BasicDBObject("title", title)
-                    .append("text", text)
-                    .append("id" , id)
+            DBObject document = new BasicDBObject("id_page", id_page)
+                    .append("palabra", palabra)
+                    .append("count" , count)
                     .append("create_at", now);
 
             // Inserto el documento en la coleccion de transacciones en el database
         try {
-            dataCollection.insert(document);
+            palabraCollection.insert(document);
             return true;
         } 
             catch (MongoException.DuplicateKey e) {
@@ -85,8 +85,9 @@ public class DataXMLControlador {
       
     public List<DBObject> listar() {
         
+        BasicDBObject index= new BasicDBObject("palabra", 1);
        try{
-            DBCursor resultados = dataCollection.find();
+            DBCursor resultados = palabraCollection.find().hint(index);
             System.out.println(resultados.toArray());
             return resultados.toArray();
         }
@@ -96,10 +97,10 @@ public class DataXMLControlador {
         }
     }
     
-     public List<DBObject> buscar(int id) {
+     public List<DBObject> buscar(String palabra) {
         
        try{
-            DBCursor resultados = dataCollection.find(new BasicDBObject("id",id));
+            DBCursor resultados = palabraCollection.find(new BasicDBObject("palabra",palabra));
             System.out.println(resultados.toArray());
             return resultados.toArray();
         }
@@ -112,7 +113,7 @@ public class DataXMLControlador {
      public void borrarTodo(){
          
         try{
-            dataCollection.drop();
+            palabraCollection.drop();
         }
         catch(Exception e){
             System.out.println(e);

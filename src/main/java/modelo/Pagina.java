@@ -4,9 +4,11 @@ package modelo;
 import com.mongodb.BasicDBObject;
 import java.util.Date;
 
-public class DataXML extends BasicDBObject{
-    Date now = new Date();
-    public DataXML (String title, String text, int id){       
+public class Pagina extends BasicDBObject{
+    
+    public Pagina (String title, String text, int id){   
+        
+        Date now = new Date();
         this.append("title", title)
             .append("text", text)
             .append("id", id)

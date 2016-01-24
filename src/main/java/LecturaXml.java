@@ -3,7 +3,7 @@
 import com.mongodb.DB;
 import com.mongodb.MongoClient;
 import com.mongodb.ServerAddress;
-import controlador.DataXMLControlador;
+import controlador.PaginaControlador;
 import java.io.File;
 import java.io.IOException;
 import java.net.UnknownHostException;
@@ -20,7 +20,7 @@ import org.xml.sax.helpers.DefaultHandler;
 public class LecturaXml {
     private static DB database;
     private static MongoClient cliente;
-    private static DataXMLControlador dataControlador;
+    private static PaginaControlador paginasControlador;
     
      private boolean isTexto;
      private boolean isTitulo;
@@ -42,11 +42,11 @@ public class LecturaXml {
         //Creo conexion con base de datos
         database = cliente.getDB("DBIndex");
         //Instancio controlador de DataXML, con este se puede agregar, listas, borrar de MongoDB, etc
-        dataControlador= new DataXMLControlador();
+        paginasControlador= new PaginaControlador();
         
         System.out.println("Iniciar BD Mongo");
         System.out.println("Borrando datos antiguos");
-        dataControlador.borrarTodo();
+        paginasControlador.borrarTodo();
        
         //Leo desde prueba.xml
 	SAXParserFactory factory = SAXParserFactory.newInstance();
@@ -94,9 +94,8 @@ public class LecturaXml {
                     
                     //Guardar en BD
                     contador= contador +1;
-                    dataControlador.agregar(titulo, texto, contador);
-                    dataControlador.buscar(contador);
-                    //System.out.println("Titulo :" + titulo +  ", Texto: "+ texto);
+                    paginasControlador.agregar(titulo, texto, contador);
+                    paginasControlador.buscar(contador);
                 }
 	}
 
