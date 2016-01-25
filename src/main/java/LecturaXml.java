@@ -4,6 +4,7 @@ import com.mongodb.DB;
 import com.mongodb.MongoClient;
 import com.mongodb.ServerAddress;
 import controlador.PaginaControlador;
+import controlador.PalabraControlador;
 import java.io.File;
 import java.io.IOException;
 import java.net.UnknownHostException;
@@ -21,6 +22,7 @@ public class LecturaXml {
     private static DB database;
     private static MongoClient cliente;
     private static PaginaControlador paginasControlador;
+    private static PalabraControlador palabrasControlador;
     
      private boolean isTexto;
      private boolean isTitulo;
@@ -92,10 +94,46 @@ public class LecturaXml {
                     texto=content.toString();
                     isTexto=false;
                     
-                    //Guardar en BD
+                    //Guardar en BD la pagina
                     contador= contador +1;
-                    paginasControlador.agregar(titulo, texto, contador);
+                    paginasControlador.agregar(titulo, texto,contador);
                     paginasControlador.buscar(contador);
+                    
+                    //Guardar en BD las palabras de una pagina
+                    //palabrasControlador.agregar(id_pagina, palabra, count);
+                    
+                    //1. Necesitas borrar con replaceAll todas las palabras del Blacklist
+                    //2. Necesitas borrar con replaceFirst y empezar a comparar palabra por palabra y empezar a contar
+                    //Si el texto reemplazado es igual al texto original de esa iteracion es que no se puede filtrar mas
+                    //y tu count final, es la cantidad de esa palabra en el texto.
+                    //Revisar http://ideone.com/kcH6YL
+                    /*
+                     import java.util.*;
+                     import java.lang.*;
+                     import java.io.*;
+                            class Ideone
+                            {
+                                    public static void main (String[] args) throws java.lang.Exception
+                                    {
+                                             // Cadena sobre la que realizaremos la sustitución
+                                    String cadena1 = "En un lugar de La Mancha";
+
+                                    // Cadena en la que almacenaremos el resultado
+                                    String cadena2 = null;
+
+                                    cadena2 = cadena1.replaceAll("en", "");
+                                    if(cadena2.equals(cadena1)){
+                                            System.out.println("No se encuentra palabra");
+                                    }
+                                    else {
+                                            System.out.println("Se encuentra palabra");
+                                            System.out.println(cadena2);
+                                    }
+
+                                    }
+                            }
+                    */
+                    
                 }
 	}
 
