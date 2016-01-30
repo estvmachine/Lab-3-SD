@@ -8,6 +8,9 @@ import controlador.PalabraControlador;
 import java.io.File;
 import java.io.IOException;
 import java.net.UnknownHostException;
+import java.text.Normalizer;
+import java.util.ArrayList;
+import java.util.StringTokenizer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.ParserConfigurationException;
@@ -62,7 +65,9 @@ public class LecturaXml {
 	boolean isTitulo = false;
         String texto = "";
         String titulo= "";
-        StringBuilder content;
+        StringBuilder content;          
+        StringTokenizer textanalizar;   
+        ArrayList<String> textcortado;
         int contador=0;
 
         @Override
@@ -93,46 +98,62 @@ public class LecturaXml {
                 else if(isTexto){
                     texto=content.toString();
                     isTexto=false;
-                    
+                              
                     //Guardar en BD la pagina
                     contador= contador +1;
                     paginasControlador.agregar(titulo, texto,contador);
                     paginasControlador.buscar(contador);
                     
+                    texto = content.toString();                    
+                    textanalizar = new StringTokenizer(texto.replaceAll("(?s)", ""));
+                    textcortado = new ArrayList<String>();                    
+                                     
+                    while(textanalizar.hasMoreElements()){
+                    
+                    // System.out.println("Palabra: " + textanalizar.nextToken()); 
+                    //=================================================
+                    //=================================================
+                     //String str=textanalizar.nextToken(); //pasa de token a un string
+                     // System.out.println("Palabra: " + str); 
+                      //   texto = Normalizer.normalize(str, Normalizer.Form.NFD);
+                       //  texto = texto.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
+                            
+                       // String analisis1 = new String (str.replaceAll("[{}=:;,.]",""));
+                       // String analisis2 = new String (analisis1.replaceAll("[/#<>()]",""));
+                       // System.out.println("Palabra: " + analisis2); 
+                        
+                                // Object siguiente = str.replaceAll("[^a-zA-Z0-9]+", " ");
+                                // System.out.println("Palabra: " + siguiente);
+                                
+                                //=============================================0===
+                                //==============================================
+                                
+                                String listo = Normalizer.normalize(textanalizar.nextElement().toString(), Normalizer.Form.NFD);
+                                //  System.out.println("palabra: " + listo);
+                                 listo = listo.replaceAll("[^\\p{ASCII}]", "");
+                                 listo = listo.replaceAll("\\p{M}", "");
+                                 listo = listo.replaceAll("[^a-zA-Z0-9]+", " ");
+                                //  System.out.println("palabra: " + siguiente);
+                                
+                                if (listo.toString().equals(" ") == true) {
+                                
+                                }else {
+                                StringTokenizer arreglado = new StringTokenizer(listo.toString(), " ");
+                                while (arreglado.hasMoreElements()) {
+                                Object sigelemento = arreglado.nextElement().toString();
+                                if (sigelemento.toString().equals(" ") == true) {
+                                
+                                }else {
+                                textcortado.add(sigelemento.toString().toUpperCase());
+                                System.out.println("palabra: " + sigelemento.toString());
+                                }
+                                }
+                                };
+                    }
+                    
                     //Guardar en BD las palabras de una pagina
                     //palabrasControlador.agregar(id_pagina, palabra, count);
-                    
-                    //1. Necesitas borrar con replaceAll todas las palabras del Blacklist
-                    //2. Necesitas borrar con replaceFirst y empezar a comparar palabra por palabra y empezar a contar
-                    //Si el texto reemplazado es igual al texto original de esa iteracion es que no se puede filtrar mas
-                    //y tu count final, es la cantidad de esa palabra en el texto.
-                    //Revisar http://ideone.com/kcH6YL
-                    /*
-                     import java.util.*;
-                     import java.lang.*;
-                     import java.io.*;
-                            class Ideone
-                            {
-                                    public static void main (String[] args) throws java.lang.Exception
-                                    {
-                                             // Cadena sobre la que realizaremos la sustitución
-                                    String cadena1 = "En un lugar de La Mancha";
-
-                                    // Cadena en la que almacenaremos el resultado
-                                    String cadena2 = null;
-
-                                    cadena2 = cadena1.replaceAll("en", "");
-                                    if(cadena2.equals(cadena1)){
-                                            System.out.println("No se encuentra palabra");
-                                    }
-                                    else {
-                                            System.out.println("Se encuentra palabra");
-                                            System.out.println(cadena2);
-                                    }
-
-                                    }
-                            }
-                    */
+                                  
                     
                 }
 	}
