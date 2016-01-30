@@ -48,10 +48,12 @@ public class LecturaXml {
         database = cliente.getDB("DBIndex");
         //Instancio controlador de DataXML, con este se puede agregar, listas, borrar de MongoDB, etc
         paginasControlador= new PaginaControlador();
+        palabrasControlador= new PalabraControlador();
         
         System.out.println("Iniciar BD Mongo");
         System.out.println("Borrando datos antiguos");
         paginasControlador.borrarTodo();
+        palabrasControlador.borrarTodo();
        
         //Leo desde prueba.xml
 	SAXParserFactory factory = SAXParserFactory.newInstance();
@@ -128,17 +130,18 @@ public class LecturaXml {
                                 
                                 }else {
                                 textcortado.add(sigelemento.toString().toUpperCase());
-                                System.out.println("palabra: " + sigelemento.toString());
+                                //System.out.println("palabra: " + sigelemento.toString());
+                                
+                                //Guardar en BD las palabras de una pagina
+                                palabrasControlador.agregarOeditar(contador, sigelemento.toString().toUpperCase());
+                                
                                 }
                                 }
                                 };
                     }
                     
-                    //Guardar en BD las palabras de una pagina
-                    //palabrasControlador.agregar(id_pagina, palabra, count);
-                                  
-                    
                 }
+                
 	}
 
         @Override
@@ -152,6 +155,8 @@ public class LecturaXml {
      };
   
        saxParser.parse(file, handler);
+       
+       palabrasControlador.listar();
  
      } catch (ParserConfigurationException | SAXException | IOException e) {
      }  

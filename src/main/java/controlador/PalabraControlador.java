@@ -58,7 +58,7 @@ public class PalabraControlador {
         }
     }
     
-    public boolean agregar(int id_page, String palabra, int count){
+    public boolean agregar(int id_page, String palabra){
 
             //Determino la fecha para guardarla
             Date now = new Date();
@@ -66,7 +66,7 @@ public class PalabraControlador {
             // Creo un documento para agregar a la coleccion.
             DBObject document = new BasicDBObject("id_page", id_page)
                     .append("palabra", palabra)
-                    .append("count" , count)
+                    .append("count" , 1)
                     .append("create_at", now);
 
             // Inserto el documento en la coleccion de transacciones en el database
@@ -82,12 +82,45 @@ public class PalabraControlador {
 
     }
     
+    public void agregarOeditar(int id_page, String palabra){
+        
+       List<DBObject> lista;
+       lista=this.buscar(id_page, palabra);
+       
+       if(lista.isEmpty()){
+           this.agregar(id_page, palabra);
+       }
+       else{
+           this.editar(id_page, palabra);
+       }
+    }
+    
+    public boolean editar(int id_page, String palabra){
+
+            //Update del count
+                BasicDBObject searched_document= new BasicDBObject("id_pagina", id_page).append("palabra", palabra);
+        
+           	BasicDBObject update_document = new BasicDBObject("$set", new BasicDBObject().append("$inc", new BasicDBObject().append("count", 1)) );
+                
+                
+            // Inserto el documento en la coleccion de transacciones en el database
+        try {
+            palabraCollection.update( searched_document , update_document);
+            return true;
+        } 
+            catch (MongoException.DuplicateKey e) {
+            System.out.println("Error en el guardado");
+            return false;
+        }
+    
+
+    }
+    
       
     public List<DBObject> listar() {
         
-        BasicDBObject index= new BasicDBObject("palabra", 1);
        try{
-            DBCursor resultados = palabraCollection.find().hint(index);
+            DBCursor resultados = palabraCollection.find();
             System.out.println(resultados.toArray());
             return resultados.toArray();
         }
@@ -97,11 +130,10 @@ public class PalabraControlador {
         }
     }
     
-     public List<DBObject> buscar(String palabra) {
+     public List<DBObject> buscar(int id_page, String palabra) {
         
        try{
-            DBCursor resultados = palabraCollection.find(new BasicDBObject("palabra",palabra));
-            System.out.println(resultados.toArray());
+            DBCursor resultados = palabraCollection.find(new BasicDBObject("palabra",palabra).append("id_page", id_page));
             return resultados.toArray();
         }
         catch(Exception e){
