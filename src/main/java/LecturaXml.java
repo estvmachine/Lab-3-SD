@@ -108,34 +108,17 @@ public class LecturaXml {
                     textanalizar = new StringTokenizer(texto.replaceAll("(?s)", ""));
                     textcortado = new ArrayList<String>();                    
                                      
-                    while(textanalizar.hasMoreElements()){
-                    
-                    // System.out.println("Palabra: " + textanalizar.nextToken()); 
-                    //=================================================
-                    //=================================================
-                     //String str=textanalizar.nextToken(); //pasa de token a un string
-                     // System.out.println("Palabra: " + str); 
-                      //   texto = Normalizer.normalize(str, Normalizer.Form.NFD);
-                       //  texto = texto.replaceAll("[\\p{InCombiningDiacriticalMarks}]", "");
-                            
-                       // String analisis1 = new String (str.replaceAll("[{}=:;,.]",""));
-                       // String analisis2 = new String (analisis1.replaceAll("[/#<>()]",""));
-                       // System.out.println("Palabra: " + analisis2); 
-                        
-                                // Object siguiente = str.replaceAll("[^a-zA-Z0-9]+", " ");
-                                // System.out.println("Palabra: " + siguiente);
+                    while(textanalizar.hasMoreElements()){                                   
                                 
-                                //=============================================0===
-                                //==============================================
-                                
-                                String listo = Normalizer.normalize(textanalizar.nextElement().toString(), Normalizer.Form.NFD);
-                                //  System.out.println("palabra: " + listo);
-                                 listo = listo.replaceAll("[^\\p{ASCII}]", "");
-                                 listo = listo.replaceAll("\\p{M}", "");
+                        String listo = Normalizer.normalize(textanalizar.nextElement().toString(), Normalizer.Form.NFD);
+                             
+                        listo = listo.replaceAll("[^\\p{ASCII}]", "");
+                        listo = listo.replaceAll("\\p{M}", "");
                                  listo = listo.replaceAll("[^a-zA-Z0-9]+", " ");
-                                //  System.out.println("palabra: " + siguiente);
-                                
+                                                            
                                 if (listo.toString().equals(" ") == true) {
+                                    
+                                    //hola
                                 
                                 }else {
                                 StringTokenizer arreglado = new StringTokenizer(listo.toString(), " ");
