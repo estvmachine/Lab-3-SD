@@ -48,10 +48,11 @@ public class LecturaXml {
         database = cliente.getDB("DBIndex");
         //Instancio controlador de DataXML, con este se puede agregar, listas, borrar de MongoDB, etc
         paginasControlador= new PaginaControlador();
-        
+        palabrasControlador = new PalabraControlador();
         System.out.println("Iniciar BD Mongo");
         System.out.println("Borrando datos antiguos");
         paginasControlador.borrarTodo();
+        palabrasControlador.borrarTodo();
        
         //Leo desde prueba.xml
 	SAXParserFactory factory = SAXParserFactory.newInstance();
@@ -116,26 +117,25 @@ public class LecturaXml {
                         listo = listo.replaceAll("\\p{M}", "");
                         listo = listo.replaceAll("[^a-zA-Z0-9]+", " ");
                                                             
-                            if (listo.toString().equals(" ") == true) {
-                                   
+                            if (listo.toString().equals(" ") == true) {                                   
                                                     
-                                }else {
+                            }else {
                                 StringTokenizer arreglado = new StringTokenizer(listo.toString(), " ");
                                 while (arreglado.hasMoreElements()) {
-                                Object sigelemento = arreglado.nextElement().toString();
-                                if (sigelemento.toString().equals(" ") == true) {
+                                    Object sigelemento = arreglado.nextElement().toString();
+                                    if (sigelemento.toString().equals(" ") == true) {
                                 
-                                }else {
-                                textcortado.add(sigelemento.toString().toUpperCase());
-                                System.out.println("palabra: " + sigelemento.toString());
+                                    }else {
+                                        textcortado.add(sigelemento.toString().toUpperCase());
+                                       // System.out.println("palabra: " + sigelemento.toString());
+                                        //Guardar en BD las palabras de una pagina
+                                        palabrasControlador.agregar(contador,sigelemento.toString(),1);        
+                                    }
                                 }
-                                }
-                                };
-                    }
-                    
-                    //Guardar en BD las palabras de una pagina
-                    //palabrasControlador.agregar(id_pagina, palabra, count);
-                                  
+                          
+                            };
+                    }                   
+                                         
                     
                 }
 	}
@@ -150,8 +150,8 @@ public class LecturaXml {
 
      };
   
-       saxParser.parse(file, handler);
- 
+        saxParser.parse(file, handler);
+        palabrasControlador.listar();
      } catch (ParserConfigurationException | SAXException | IOException e) {
      }  
    }

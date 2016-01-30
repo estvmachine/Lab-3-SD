@@ -87,7 +87,7 @@ public class PalabraControlador {
         
         BasicDBObject index= new BasicDBObject("palabra", 1);
        try{
-            DBCursor resultados = palabraCollection.find().hint(index);
+            DBCursor resultados = palabraCollection.find();
             System.out.println(resultados.toArray());
             return resultados.toArray();
         }
