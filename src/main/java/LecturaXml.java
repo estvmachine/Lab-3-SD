@@ -114,12 +114,11 @@ public class LecturaXml {
                              
                         listo = listo.replaceAll("[^\\p{ASCII}]", "");
                         listo = listo.replaceAll("\\p{M}", "");
-                                 listo = listo.replaceAll("[^a-zA-Z0-9]+", " ");
+                        listo = listo.replaceAll("[^a-zA-Z0-9]+", " ");
                                                             
-                                if (listo.toString().equals(" ") == true) {
-                                    
-                                    //hola
-                                
+                            if (listo.toString().equals(" ") == true) {
+                                   
+                                                    
                                 }else {
                                 StringTokenizer arreglado = new StringTokenizer(listo.toString(), " ");
                                 while (arreglado.hasMoreElements()) {
