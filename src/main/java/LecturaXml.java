@@ -52,6 +52,7 @@ public class LecturaXml {
         
         System.out.println("Iniciar BD Mongo");
         System.out.println("Borrando datos antiguos");
+        
         paginasControlador.borrarTodo();
         palabrasControlador.borrarTodo();
        
@@ -116,18 +117,17 @@ public class LecturaXml {
                              
                         listo = listo.replaceAll("[^\\p{ASCII}]", "");
                         listo = listo.replaceAll("\\p{M}", "");
-                                 listo = listo.replaceAll("[^a-zA-Z0-9]+", " ");
+                        listo = listo.replaceAll("[^a-zA-Z0-9]+", " ");
                                                             
-                                if (listo.toString().equals(" ") == true) {
-                                    
-                                    //hola
-                                
-                                }else {
+                            if (listo.toString().equals(" ") == true) {                                   
+                                                    
+                            }else {
                                 StringTokenizer arreglado = new StringTokenizer(listo.toString(), " ");
                                 while (arreglado.hasMoreElements()) {
-                                Object sigelemento = arreglado.nextElement().toString();
-                                if (sigelemento.toString().equals(" ") == true) {
+                                    Object sigelemento = arreglado.nextElement().toString();
+                                    if (sigelemento.toString().equals(" ") == true) {
                                 
+
                                 }else {
                                 textcortado.add(sigelemento.toString().toUpperCase());
                                 //System.out.println("palabra: " + sigelemento.toString());
@@ -153,11 +153,9 @@ public class LecturaXml {
 	}
 
      };
-  
-       saxParser.parse(file, handler);
-       
-       palabrasControlador.listar();
- 
+
+        saxParser.parse(file, handler);
+        palabrasControlador.listar();
      } catch (ParserConfigurationException | SAXException | IOException e) {
      }  
    }
