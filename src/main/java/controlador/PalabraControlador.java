@@ -82,41 +82,30 @@ public class PalabraControlador {
 
     }
     
-    public void agregarOeditar(int id_page, String palabra){
-        
-       List<DBObject> lista;
-       lista=this.buscar(id_page, palabra);
-       
-       if(lista.isEmpty()){
-           this.agregar(id_page, palabra);
-       }
-       else{
-           this.editar(id_page, palabra);
-       }
-    }
+    public boolean agregarOeditar(int id_page, String palabra){
     
-    public boolean editar(int id_page, String palabra){
-
-            //Update del count
-                BasicDBObject searched_document= new BasicDBObject("id_pagina", id_page).append("palabra", palabra);
+        //Elemento buscado
+        BasicDBObject searched_document= new BasicDBObject("id_page", id_page).append("palabra", palabra);
         
-           	BasicDBObject update_document = new BasicDBObject("$set", new BasicDBObject().append("$inc", new BasicDBObject().append("count", 1)) );
-                
-                
+        //Contenido de lo que se quiere actualizar
+        BasicDBObject update_document = new BasicDBObject().append("$inc", new BasicDBObject().append("count", 1));
             // Inserto el documento en la coleccion de transacciones en el database
         try {
-            palabraCollection.update( searched_document , update_document);
+            //Al metodo update se adiciona el booleano para $set=true, solo cambiar lo que se actualiza
+            //y que si no existe el elemento, lo agrege.
+            palabraCollection.update( searched_document , update_document, true, false);
+            //System.out.println("Edite todo bien");
             return true;
         } 
             catch (MongoException.DuplicateKey e) {
             System.out.println("Error en el guardado");
+                System.out.println(e);
             return false;
         }
     
 
     }
     
-      
     public List<DBObject> listar() {
         
        try{

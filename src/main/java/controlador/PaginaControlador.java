@@ -87,7 +87,7 @@ public class PaginaControlador {
         
         BasicDBObject index= new BasicDBObject("id", 1);
        try{
-            DBCursor resultados = paginaCollection.find().hint(index);
+            DBCursor resultados = paginaCollection.find();
             System.out.println(resultados.toArray());
             return resultados.toArray();
         }
